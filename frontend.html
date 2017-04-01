@@ -9,9 +9,162 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 </head>
 <body>
+<script type="text/javascript">
 
+function SendPost(command) {
+  var url = "/push";
+  var commandStr="command="
+  var theParams = commandStr + command
+  var xhr = new XMLHttpRequest();
+  xhr.open("POST", url, true);
+
+  //Send the proper header information along with the request
+  xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+
+  xhr.send(theParams);
+}
+
+function Auth() {
+  var userID = document.getElementById("userid").value
+  var password = document.getElementById(pwd)
+  console.log("Auth")
+  console.log(userID)
+}
+
+function Add() {
+  var userID = document.getElementById("userid").value
+  var addamount = document.getElementById(addamount)
+  var cmd = "ADD,"+userID+","+addamount
+  SendPost(cmd)
+  console.log("Add")
+}
+
+function Quote() {
+  var userID = document.getElementById("userid").value
+  var stocksymbol = document.getElementById(quotestocksymbol)
+  var cmd = "QUOTE,"+userID+","+stocksymbol
+  SendPost(cmd)
+  console.log("Quote")
+}
+
+function Buy() {
+  var userID = document.getElementById("userid").value
+  var stocksymbol = document.getElementById(buystocksymbol)
+  var amnt = document.getElementById(buyamount)
+  var cmd = "BUY,"+userID+","+stocksymbol+","+amnt
+  SendPost(cmd)
+  console.log("Buy")
+}
+
+function CommitBuy() {
+  var userID = document.getElementById("userid").value
+  var cmd = "COMMIT_BUY,"+userID
+  console.log("Commit Buy")
+}
+
+function CancelBuy() {
+  var userID = document.getElementById("userid").value
+  var cmd = "CANCEL_BUY,"+userID
+  console.log("Cancel Buy")
+}
+
+function Sell() {
+  var userID = document.getElementById("userid").value
+  var stocksymbol = document.getElementById(sellstocksymbol)
+  var amnt = document.getElementById(sellamount)
+  var cmd = "SELL,"+userID+","+stocksymbol+","+amnt
+  SendPost(cmd)
+  console.log("Sell")
+}
+
+function CommitSell() {
+  var userID = document.getElementById("userid").value
+  var cmd = "COMMIT_SELL,"+userID
+  console.log("Commit Sell")
+}
+
+function CancelSell() {
+  var userID = document.getElementById("userid").value
+  var cmd = "CANCEL_SELL,"+userID
+  console.log("Cancel Sell")
+}
+
+function SetBuyAmount() {
+  var userID = document.getElementById("userid").value
+  var stocksymbol = document.getElementById(setbuystocksymbol)
+  var amnt = document.getElementById(setbuyamount)
+  var cmd = "SET_BUY_AMOUNT,"+userID+","+stocksymbol+","+amnt
+  SendPost(cmd)
+  console.log("Set buy amount")
+}
+
+function CancelSetBuy() {
+  var userID = document.getElementById("userid").value
+  var stocksymbol = document.getElementById(cancelbuystocksymbol)
+  var cmd = "CANCEL_SET_BUY,"+userID+","+stocksymbol
+  SendPost(cmd)
+  console.log("Cancel set buy")
+}
+
+function SetBuyTrigger() {
+  var userID = document.getElementById("userid").value
+  var stocksymbol = document.getElementById(setbuytrigstocksymbol)
+  var amnt = document.getElementById(setbuytrigamount)
+  var cmd = "SET_BUY_TRIGGER,"+userID+","+stocksymbol+","+amnt
+  SendPost(cmd)
+  console.log("Set buy trigger")
+}
+
+function SetSellAmount() {
+  var userID = document.getElementById("userid").value
+  var stocksymbol = document.getElementById(setsellstocksymbol)
+  var amnt = document.getElementById(setsellamount)
+  var cmd = "SET_SELL_AMOUNT,"+userID+","+stocksymbol+","+amnt
+  SendPost(cmd)
+  console.log("Set Sell Amount")
+}
+
+function CancelSetSell() {
+  var userID = document.getElementById("userid").value
+  var stocksymbol = document.getElementById(cancelsellstocksymbol)
+  var cmd = "CANCEL_SET_SELL,"+userID+","+stocksymbol
+  SendPost(cmd)
+  console.log("Cancel set sell")
+}
+
+function SetSellTrigger() {
+  var userID = document.getElementById("userid").value
+  var stocksymbol = document.getElementById(setselltrigstocksymbol)
+  var amnt = document.getElementById(setselltrigamount)
+  var cmd = "SET_SELL_TRIGGER,"+userID+","+stocksymbol+","+amnt
+  SendPost(cmd)
+  console.log("Set sell trigger")
+}
+
+function Dumplog() {
+  var userID = document.getElementById("userid").value
+  if(userID === "admin"){
+    SendPost("DUMPLOG,out.dump")
+    console.log("Admin Dump")
+  }
+  else
+  {
+    var fn = document.getElementById(dumplogfile)
+    var cmd = "DUMPLOG,"+userID+","+fn
+    SendPost(cmd)
+    console.log("User Dump")
+  }
+}
+
+function DisplaySummary() {
+  var userID = document.getElementById("userid").value
+  var cmd = "DISPLAY_SUMMARY,"+userID
+  console.log("Display summary")
+}
+
+
+</script>
 <div class="container">
-
   <h2>Credentials:</h2>
   <form>
     <div class="form-group">
@@ -22,7 +175,7 @@
       <label for="pwd">Password:</label>
       <input type="password" class="form-control" id="pwd" placeholder="Enter password">
     </div>
-    <button type="submit" class="btn btn-default">Log In</button>
+    <button type="button" class="btn btn-default" onclick="Auth()">Log In</button>
   </form>
 
   <h2>Add:</h2>
@@ -31,7 +184,7 @@
       <label for="addamount">Amount:</label>
       <input type="text" class="form-control" id="addamount" placeholder="Enter amount">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default" onclick="Add()">Submit</button>
   </form>
 
   <h2>Quote:</h2>
@@ -40,7 +193,7 @@
       <label for="quotestocksymbol">Stock Symbol:</label>
       <input type="text" class="form-control" id="quotestocksymbol" placeholder="Enter stock symbol">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default" onclick="Quote()">button</button>
   </form>
 
   <h2>Buy:</h2>
@@ -53,17 +206,17 @@
       <label for="buyamount">Amount:</label>
       <input type="text" class="form-control" id="buyamount" placeholder="Enter amount">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default" onclick="Buy()">button</button>
   </form>
 
   <h2>Commit Buy:</h2>
   <form>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default" onclick="CommitBuy()">button</button>
   </form>
 
   <h2>Cancel Buy:</h2>
   <form>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Sell:</h2>
@@ -76,17 +229,17 @@
       <label for="sellamount">Amount:</label>
       <input type="text" class="form-control" id="sellamount" placeholder="Enter amount">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Commit Sell:</h2>
   <form>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Cancel Sell:</h2>
   <form>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Set Buy Amount:</h2>
@@ -99,7 +252,7 @@
       <label for="setbuyamount">Amount:</label>
       <input type="text" class="form-control" id="setbuyamount" placeholder="Enter amount">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Cancel Set Buy:</h2>
@@ -108,7 +261,7 @@
       <label for="cancelbuystocksymbol">Stock Symbol:</label>
       <input type="text" class="form-control" id="cancelbuystocksymbol" placeholder="Enter stock symbol">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Set Buy Trigger:</h2>
@@ -121,7 +274,7 @@
       <label for="setbuytrigamount">Amount:</label>
       <input type="text" class="form-control" id="setbuytrigamount" placeholder="Enter amount">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Set Sell Amount:</h2>
@@ -134,7 +287,7 @@
       <label for="setsellamount">Amount:</label>
       <input type="text" class="form-control" id="setsellamount" placeholder="Enter amount">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Cancel Set Sell:</h2>
@@ -143,7 +296,7 @@
       <label for="cancelsellstocksymbol">Stock Symbol:</label>
       <input type="text" class="form-control" id="cancelsellstocksymbol" placeholder="Enter stock symbol">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Set Sell Trigger:</h2>
@@ -156,21 +309,21 @@
       <label for="setselltrigamount">Amount:</label>
       <input type="text" class="form-control" id="setselltrigamount" placeholder="Enter amount">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Dumplog:</h2>
   <form>
     <div class="form-group">
-      <label for="dumplog">Amount:</label>
-      <input type="text" class="form-control" id="dumplog" placeholder="Enter file name">
+      <label for="dumplogfile">Amount:</label>
+      <input type="text" class="form-control" id="dumplogfile" placeholder="Enter file name">
     </div>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
   <h2>Display Summary:</h2>
   <form>
-    <button type="submit" class="btn btn-default">Submit</button>
+    <button type="button" class="btn btn-default">button</button>
   </form>
 
 
